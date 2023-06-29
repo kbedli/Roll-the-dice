@@ -9,12 +9,13 @@ const currentScore1 = document.querySelector("#score--1");
 const player0El = document.querySelector(".player--0");
 const player1El = document.querySelector(".player--1");
 
-let score, activePlayer, totals;
+let score, activePlayer, totals, playing;
 
 const init = function () {
   score = 0;
   activePlayer = 0;
   totals = [0, 0];
+  playing = true;
 
   total0.textContent = totals[0];
   total1.textContent = totals[1];
@@ -37,17 +38,18 @@ const switchPlayer = function () {
 };
 
 btnRollDice.addEventListener("click", () => {
-  let dice = Math.trunc(Math.random() * 6) + 1;
-  diceImg.src = `dice-${dice}.png`;
-  diceImg.classList.remove("hidden");
-
-  if (dice !== 1) {
-    score += dice;
-    document.querySelector(`#current--${activePlayer}`).textContent = score;
-  } else {
-    score = 0;
-    document.querySelector(`#current--${activePlayer}`).textContent = score;
-    switchPlayer();
+  if (playing) {
+    let dice = Math.trunc(Math.random() * 6) + 1;
+    diceImg.src = `dice-${dice}.png`;
+    diceImg.classList.remove("hidden");
+    if (dice !== 1) {
+      score += dice;
+      document.querySelector(`#current--${activePlayer}`).textContent = score;
+    } else {
+      score = 0;
+      document.querySelector(`#current--${activePlayer}`).textContent = score;
+      switchPlayer();
+    }
   }
 });
 
@@ -60,7 +62,7 @@ btnHold.addEventListener("click", () => {
   if (totals[activePlayer] < 20) {
     switchPlayer();
   } else {
-    console.log("wygrałaś");
+    playing = false;
     diceImg.classList.add("hidden");
     document
       .querySelector(`.player--${activePlayer}`)
